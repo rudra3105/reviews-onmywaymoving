@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customer Review Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .form-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .form-container img {
+      width: 120px;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    input, select, textarea, button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      background-color: #2563eb;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1d4ed8;
+    }
+
+    /* Thank You Popup */
+    .thank-you-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      z-index: 1000;
+      text-align: center;
+    }
+
+    .thank-you-popup h3 {
+      margin-bottom: 10px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <!-- Company Logo -->
+    <img src="/logo.png" alt="Company Logo" />
+
+    <h2>Submit Your Review</h2>
+    <form id="reviewForm">
+      <!-- Web3Forms Format -->
+      <input type="hidden" name="access_key" value="70126d26-d437-4b0f-b6fc-2afce4d055d5">
+
+      <!-- Name -->
+      <div class="form-group">
+        <input type="text" name="name" placeholder="Your Name" required>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <input type="email" name="email" placeholder="Your Email" required>
+      </div>
+
+      <!-- Phone -->
+      <div class="form-group">
+        <input type="text" name="phone" placeholder="Your Phone Number" required>
+      </div>
+
+      <!-- Rating -->
+      <div class="form-group">
+        <select name="rating" required>
+          <option value="">Select Rating</option>
+          <option value="⭐">⭐</option>
+          <option value="⭐⭐">⭐⭐</option>
+          <option value="⭐⭐⭐">⭐⭐⭐</option>
+          <option value="⭐⭐⭐⭐">⭐⭐⭐⭐</option>
+          <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option>
+        </select>
+      </div>
+
+      <!-- Review -->
+      <div class="form-group">
+        <textarea name="message" placeholder="Write your review..." rows="5" required></textarea>
+      </div>
+
+      <!-- Submit -->
+      <div class="form-group">
+        <button type="submit">Submit Review</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Thank You Popup -->
+  <div class="thank-you-popup" id="thankYouPopup">
+    <h3>Thank you!</h3>
+    <p>Your review has been submitted successfully.</p>
+  </div>
+
+  <script>
+    const form = document.getElementById("reviewForm");
+    const popup = document.getElementById("thankYouPopup");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      try {
+        const res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          body: formData
+        });
+
+        if (res.ok) {
+          form.reset();
+          popup.style.display = "block";
+          setTimeout(() => {
+            popup.style.display = "none";
+          }, 3000);
+        } else {
+          alert("❌ Failed to submit. Please try again.");
+        }
+      } catch (error) {
+        alert("❌ Network error. Try again later.");
+        console.error(error);
+      }
+    });
+  </script>
+
+</body>
+</html>
